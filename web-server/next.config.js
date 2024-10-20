@@ -9,7 +9,7 @@ const config = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // reactStrictMode: false,
+  reactStrictMode: false,
 };
 
 export default config;

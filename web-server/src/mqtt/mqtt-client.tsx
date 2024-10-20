@@ -34,9 +34,10 @@ export const MQTTProvider = (props: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (!client?.connected) {
-      console.log("connecting to mqtt server");
+      const randomClientId = `client_${Math.random().toString(36)}`;
+      console.log("connecting to mqtt server with id: " + randomClientId);
       client = mqtt.connect(env.NEXT_PUBLIC_MQTT_URL, {
-        clientId: "browser",
+        clientId: randomClientId,
         protocolId: "MQTT",
         protocolVersion: 4,
       });
@@ -69,6 +70,7 @@ export const MQTTProvider = (props: { children: React.ReactNode }) => {
     });
 
     return () => {
+      console.log("LKSDJFLKSJD");
       client?.end();
     };
   }, []);

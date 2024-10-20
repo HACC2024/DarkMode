@@ -13,17 +13,17 @@ export default function TestPage() {
 
   return (
     <main>
-      <h1 className="pb-3 font-bold">Register Switch</h1>
+      <h1 className="pb-3 text-center text-2xl font-bold">Register Switch</h1>
       <SwitchForm />
       {allSwitches.data?.map((switchItem) => (
         <SwitchTest key={switchItem.id} switch_id={switchItem.id} />
       ))}
-      <h1 className="py-3 font-bold">Register Device</h1>
+      <h1 className="py-3 text-center text-2xl font-bold">Register Device</h1>
       <DeviceForm />
       {allDevices.data?.map((device) => (
         <DeviceTest key={device.id} device_id={device.id} />
       ))}
-      <h1 className="py-3 font-bold">Register Link</h1>
+      <h1 className="py-3 text-center text-2xl font-bold">Register Link</h1>
       <LinkForm />
     </main>
   );

@@ -1,6 +1,12 @@
 import { z } from "zod";
 
-import { eq, isNotNull, isNull, notInArray } from "drizzle-orm";
+import {
+  eq,
+  InferSelectModel,
+  isNotNull,
+  isNull,
+  notInArray,
+} from "drizzle-orm";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { devices, switches } from "~/server/db/schema";
 import { TRPCError } from "@trpc/server";
