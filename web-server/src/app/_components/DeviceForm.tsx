@@ -7,7 +7,7 @@ export default function DeviceForm() {
   const utils = api.useUtils();
   const [id, setId] = useState("");
 
-  const registerDevice = api.iot.registerDevice.useMutation({
+  const registerDevice = api.iot.upsertDevice.useMutation({
     onSuccess: async () => {
       await utils.iot.invalidate();
       setId("");

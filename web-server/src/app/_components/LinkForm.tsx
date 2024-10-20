@@ -1,79 +1,110 @@
 "use client";
 
-import { ChangeEvent, useState } from "react";
 import { api } from "~/trpc/react";
+import { FormEvent, useRef } from "react";
 
 export default function LinkForm() {
-  const utils = api.useUtils();
-  const [formData, setFormData] = useState({
-    device_name: "",
-    device_id: "",
-    switch_id: "",
-    watts: 0,
-  });
+  const unlinkedDevices = api.iot.getUnlinkedDevices.useQuery();
+  const unlinkedSwitches = api.iot.getUnlinkedSwitches.useQuery();
 
-  const createLink = api.iot.createLink.useMutation({
-    onSuccess: async () => {
-      await utils.iot.invalidate();
-      setFormData({
-        device_name: "",
-        device_id: "",
-        switch_id: "",
-        watts: 0,
-      });
+  const utils = api.useUtils();
+  const updateDevice = api.iot.createLink.useMutation({
+    onSettled() {
+      utils.iot.invalidate();
     },
   });
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(formRef.current!);
+    const data = {
+      device_id: formData.get("device_id") as string,
+      switch_id: formData.get("switch_id") as string,
+      device_name: formData.get("device_name") as string,
+      watts: Number(formData.get("watts")),
+    };
+    console.log(JSON.stringify(data));
+    updateDevice.mutate(data);
+    // formRef.current?.reset();
   };
 
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        createLink.mutate(formData);
-      }}
-      className="mb-4 border p-2"
-    >
-      <input
-        type="text"
-        name="device_name"
-        placeholder="Enter Device Name"
-        value={formData.device_name}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="number"
-        name="watts"
-        placeholder="Enter Watts"
-        value={formData.watts}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="text"
-        name="device_id"
-        placeholder="Enter Device ID"
-        value={formData.device_id}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="text"
-        name="switch_id"
-        placeholder="Enter Switch ID"
-        value={formData.switch_id}
-        onChange={handleChange}
-        required
-      />
+  if (unlinkedDevices.isLoading || unlinkedSwitches.isLoading)
+    return <div>Loading...</div>;
 
-      <button type="submit">Submit</button>
+  return (
+    <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label htmlFor="device_id" className="block text-sm font-medium">
+          Device ID
+        </label>
+        <select
+          id="device_id"
+          name="device_id"
+          required
+          className="mt-1 block w-full rounded-md border border-gray-300 p-2"
+        >
+          <option value="">Select a device</option>
+          {unlinkedDevices.data?.map((device) => (
+            <option key={device.id} value={device.id}>
+              {device.device_name || device.id}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label htmlFor="switch_id" className="block text-sm font-medium">
+          Switch ID
+        </label>
+        <select
+          id="switch_id"
+          name="switch_id"
+          required
+          className="mt-1 block w-full rounded-md border border-gray-300 p-2"
+        >
+          <option value="">Select a switch</option>
+          {unlinkedSwitches.data?.map((switchItem) => (
+            <option key={switchItem.id} value={switchItem.id}>
+              {switchItem.id}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label htmlFor="device_name" className="block text-sm font-medium">
+          Device Name
+        </label>
+        <input
+          type="text"
+          id="device_name"
+          name="device_name"
+          className="mt-1 block w-full rounded-md border border-gray-300 p-2"
+          required
+        />
+      </div>
+
+      <div>
+        <label htmlFor="watts" className="block text-sm font-medium">
+          Watts
+        </label>
+        <input
+          type="number"
+          id="watts"
+          name="watts"
+          className="mt-1 block w-full rounded-md border border-gray-300 p-2"
+          required
+        />
+      </div>
+
+      <button
+        type="submit"
+        className="mt-4 w-full rounded-md bg-blue-500 p-2 text-white"
+      >
+        Submit
+      </button>
     </form>
   );
 }

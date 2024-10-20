@@ -8,8 +8,8 @@ export default function SwitchForm() {
   const [id, setId] = useState("");
 
   const registerSwitch = api.iot.registerSwitch.useMutation({
-    onSuccess: async () => {
-      await utils.iot.invalidate();
+    onSuccess: () => {
+      utils.iot.invalidate();
       setId("");
     },
   });

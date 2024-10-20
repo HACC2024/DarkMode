@@ -1,7 +1,13 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { pgTableCreator, varchar, serial, decimal } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
+import {
+  pgTableCreator,
+  varchar,
+  integer,
+  primaryKey,
+} from "drizzle-orm/pg-core";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -13,18 +19,55 @@ export const createTable = pgTableCreator((name) => `web-server_${name}`);
 
 export const devices = createTable("devices", {
   id: varchar("id").notNull().primaryKey(),
+  device_name: varchar("device_name", { length: 32 }),
+  watts: integer("watts").default(0).notNull(),
 });
 
-export const links = createTable("links", {
-  id: serial("id").primaryKey(),
-  device_name: varchar("device_name", { length: 32 }),
-  watts: decimal("watts"),
-  device_id: varchar("device_id", { length: 32 }).references(() => devices.id),
-  switch_id: varchar("switch_id", { length: 32 }).references(() => switches.id),
-});
+export const deviceRelations = relations(devices, ({ one }) => ({
+  switchInfo: one(switches),
+}));
 
 export const switches = createTable("switches", {
   id: varchar("id").notNull().primaryKey(),
+  device_id: varchar("device_id", { length: 32 })
+    .references(() => devices.id, {
+      onDelete: "set null",
+    })
+    .unique(),
 });
 
-export type Device = typeof devices.$inferSelect;
+export const switchRelations = relations(switches, ({ one }) => ({
+  device: one(devices, {
+    fields: [switches.device_id],
+    references: [devices.id],
+  }),
+}));
+
+// export const deviceSwitchLinks = createTable(
+//   "deviceSwitchLinks",
+//   {
+//     deviceId: varchar("deviceId")
+//       .notNull()
+//       .references(() => devices.id),
+//     switchId: varchar("switchId")
+//       .notNull()
+//       .references(() => switches.id),
+//   },
+//   (table) => ({
+//     pk: primaryKey({ columns: [table.deviceId, table.switchId] }),
+//   }),
+// );
+
+// export const deviceSwitchLinksRelations = relations(
+//   deviceSwitchLinks,
+//   ({ one }) => ({
+//     deviceInfo: one(devices, {
+//       fields: [deviceSwitchLinks.deviceId],
+//       references: [devices.id],
+//     }),
+//     switchInfo: one(switches, {
+//       fields: [deviceSwitchLinks.switchId],
+//       references: [switches.id],
+//     }),
+//   }),
+// );
