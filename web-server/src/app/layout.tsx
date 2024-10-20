@@ -17,7 +17,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
-      <body className="container mx-auto max-w-4xl p-4">
+      <body className="container mx-auto p-4">
         <TRPCReactProvider>
           <MQTTProvider>{children}</MQTTProvider>
         </TRPCReactProvider>
