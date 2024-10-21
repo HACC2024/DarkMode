@@ -24,6 +24,15 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.ide.cursor": {
+      "version": "https://github.com/boxqkrtm/com.unity.ide.cursor.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.test-framework": "1.1.9"
+      },
+      "hash": "2c0153a9bab1abc783e5599fa2d2cc3c69d5e389"
+    },
     "com.unity.ide.rider": {
       "version": "3.0.31",
       "depth": 0,
@@ -102,6 +111,16 @@
         "com.unity.render-pipelines.core": "14.0.11",
         "com.unity.searcher": "4.9.2"
       }
+    },
+    "com.unity.terrain-tools": {
+      "version": "5.0.5",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.terrain": "1.0.0",
+        "com.unity.modules.terrainphysics": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
       "version": "1.1.33",

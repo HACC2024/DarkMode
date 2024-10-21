@@ -1,0 +1,48 @@
+#pragma kernel CSMain
+
+#define THREADS_X 8
+#define THREADS_Y 8
+
+struct VertexData
+{
+    float3 position;
+    float3 normal;
+};
+
+RWStructuredBuffer<VertexData> verticesBuffer;
+RWStructuredBuffer<int> trianglesBuffer;
+
+int length, width;
+float noiseScale;
+float heightMultiplier;
+
+[numthreads(THREADS_X, THREADS_Y, 1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+
+    int idx = id.y * (length + 1) + id.x;
+    if (id.x > length || id.y > width) return;
+
+    float x = id.x;
+    float z = id.y;
+
+    // float noiseHeight = noise.snoise(float2(x * noiseScale / length, z * noiseScale / width)) * heightMultiplier;
+    float noiseHeight = 0; 
+    float3 position = float3(x, noiseHeight, z);
+    
+    verticesBuffer[idx].position = position;
+    verticesBuffer[idx].normal = float3(0, 1, 0); // Initial normal (will be updated later)
+
+    if (id.x < length && id.y < width)
+    {
+        int triIdx = (id.y * length + id.x) * 6;
+        int vertIdx = id.y * (length + 1) + id.x;
+
+        trianglesBuffer[triIdx] = vertIdx;
+        trianglesBuffer[triIdx + 1] = vertIdx + length + 1;
+        trianglesBuffer[triIdx + 2] = vertIdx + 1;
+        trianglesBuffer[triIdx + 3] = vertIdx + 1;
+        trianglesBuffer[triIdx + 4] = vertIdx + length + 1;
+        trianglesBuffer[triIdx + 5] = vertIdx + length + 2;
+    }
+}
