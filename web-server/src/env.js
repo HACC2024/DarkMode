@@ -15,6 +15,7 @@ export const env = createEnv({
     MQTT_USERNAME: z.string(),
     MQTT_PASSWORD: z.string(),
     MQTT_CLIENT: z.string(),
+    OPENAI_API_KEY: z.string(),
   },
 
   /**
@@ -40,6 +41,7 @@ export const env = createEnv({
     MQTT_USERNAME: process.env.MQTT_USERNAME,
     MQTT_PASSWORD: process.env.MQTT_PASSWORD,
     MQTT_CLIENT: process.env.MQTT_CLIENT,
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
     NEXT_PUBLIC_MQTT_URL: process.env.NEXT_PUBLIC_MQTT_URL,
     NEXT_PUBLIC_MQTT_CLIENT_USERNAME:

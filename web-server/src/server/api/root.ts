@@ -1,5 +1,6 @@
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { iotRouter } from "./routers/iot";
+import { chatRouter } from "./routers/chat";
 
 /**
  * This is the primary router for your server.
@@ -8,6 +9,7 @@ import { iotRouter } from "./routers/iot";
  */
 export const appRouter = createTRPCRouter({
   iot: iotRouter,
+  chat: chatRouter,
 });
 
 // export type definition of API
