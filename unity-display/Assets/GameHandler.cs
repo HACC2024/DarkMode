@@ -9,8 +9,15 @@ public class GameHandler : MonoBehaviour
     [SerializeField] private float interval = 10f;
     private void Update()
     {
-        float t = Time.timeSinceLevelLoad % interval / interval;
-        Debug.Log(t);
+        if (Application.isEditor)
+        {
+            float t = Time.timeSinceLevelLoad % interval / interval;
+            modifyEvents.Invoke(t);
+        }
+    }
+
+    public void Modify(float t)
+    {
         modifyEvents.Invoke(t);
     }
 }
