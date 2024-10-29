@@ -130,4 +130,13 @@ export const iotRouter = createTRPCRouter({
       with: { switchInfo: true },
     });
   }),
+
+  getAllLinkedDevices: publicProcedure.query(async ({ ctx }) => {
+    const devices = await ctx.db.query.devices.findMany({
+      with: { switchInfo: true },
+    });
+
+    const linkedDevices = devices.filter((data) => data.switchInfo !== null);
+    return linkedDevices;
+  }),
 });
