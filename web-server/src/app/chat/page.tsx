@@ -26,7 +26,7 @@ export default function Chat() {
       sendMessage.mutate({
         message: userInput,
         mode: keikiMode ? "keiki" : "default",
-      }); // Use keiki mode state
+      });
     }
   };
 

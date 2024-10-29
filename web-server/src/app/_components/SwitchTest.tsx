@@ -14,7 +14,7 @@ export default function SwitchTest({ switch_id }: { switch_id: string }) {
     const newState = state === "on" ? "off" : "on";
     setState(newState);
     if (switchInfo.data?.device_id) {
-      publish("device/" + switchInfo.data.device_id, `{"state":"${newState}"}`);
+      publish("device/" + switchInfo.data.device_id, newState);
     }
   };
 

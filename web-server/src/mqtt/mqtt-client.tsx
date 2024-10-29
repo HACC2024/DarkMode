@@ -62,7 +62,7 @@ export const MQTTProvider = (props: { children: React.ReactNode }) => {
     });
 
     client.on("message", (topic, message) => {
-      console.log(topic + " " + message);
+      console.log(topic + ": " + message);
       setMessages((prevMessages) => ({
         ...prevMessages,
         [topic]: message.toString(),
@@ -100,20 +100,22 @@ export const MQTTProvider = (props: { children: React.ReactNode }) => {
 
 const useMQTT = () => React.useContext(MQTTContext);
 
-export function useSubscribe(topic: string) {
+export function useSubscribe(topics: string[]) {
   const { client, isConnected, messages } = useMQTT();
 
   useEffect(() => {
-    if (isConnected && topic !== "") {
-      client?.subscribe(topic);
+    if (isConnected) {
+      topics.forEach((topic) => {
+        if (topic !== "") {
+          client?.subscribe(topic);
+        }
+      });
     }
+  }, [isConnected, topics]);
 
-    return () => {
-      client?.unsubscribe(topic);
-    };
-  }, [isConnected, topic]);
-
-  return messages[topic];
+  return Object.fromEntries(
+    Object.entries(messages).filter(([key]) => topics.includes(key)),
+  );
 }
 
 export function usePublish() {

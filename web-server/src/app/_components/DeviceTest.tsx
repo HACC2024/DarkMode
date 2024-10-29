@@ -9,9 +9,8 @@ This component pretends to be an arduino switch.
 export default function DeviceTest({ device_id }: { device_id: string }) {
   const device = api.iot.getDevice.useQuery({ id: device_id });
   const topic = device.data ? `device/${device.data?.id}` : "";
-  const message = useSubscribe(topic) ?? '{"state":"off"}';
-  const parsedMessage = JSON.parse(message);
-  const isOn = parsedMessage.state === "on";
+  const message = useSubscribe([topic]);
+  const isOn = message[topic] === "on";
 
   if (device.isLoading) return <div>Loading</div>;
 
@@ -38,3 +37,15 @@ export default function DeviceTest({ device_id }: { device_id: string }) {
     </div>
   );
 }
+
+// export default function DeviceTest({ device_id }: { device_id: string }) {
+//   const device = api.iot.getDevice.useQuery({ id: device_id });
+//   const topic = device.data ? `device/${device.data?.id}` : "";
+//   const message = useSubscribe([topic]);
+//   // const parsedMessage = JSON.parse(message[topic] ?? '{"state":"off"}');
+//   // const isOn = parsedMessage.state === "on";
+
+//   if (device.isLoading) return <div>Loading</div>;
+
+//   return <div>{JSON.stringify(message)}</div>;
+// }
