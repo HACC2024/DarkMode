@@ -1,28 +1,44 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { api } from "~/trpc/react";
 
-type Message = { type: "user" | "ai"; text: string }[];
+type Message = { type: "user" | "ai"; text: string; loading?: boolean }[];
 
 export default function Chat() {
   const [userInput, setUserInput] = useState("");
   const [messages, setMessages] = useState<Message>([]);
-  const [keikiMode, setKeikiMode] = useState(false); // State for keiki mode
+  const [keikiMode, setKeikiMode] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      scrollToBottom();
+    }
+  }, [messages]);
 
   const sendMessage = api.chat.getAiMessage.useMutation({
     onSuccess: (data) => {
-      setMessages((prev) => [
-        ...prev,
-        { text: userInput, type: "user" },
-        { text: data, type: "ai" },
-      ]);
-      setUserInput("");
+      setMessages((prev) =>
+        prev.map((msg, i) =>
+          i === prev.length - 1 ? { text: data, type: "ai" } : msg,
+        ),
+      );
     },
   });
 
   const handleSend = () => {
     if (userInput.trim()) {
+      setMessages((prev) => [
+        ...prev,
+        { text: userInput, type: "user" },
+        { text: "...", type: "ai", loading: true },
+      ]);
+      setUserInput("");
       sendMessage.mutate({
         message: userInput,
         mode: keikiMode ? "keiki" : "default",
@@ -31,44 +47,80 @@ export default function Chat() {
   };
 
   return (
-    <div className="mx-auto flex max-w-2xl flex-col p-4">
-      <div className="mb-4 flex-1 overflow-y-auto">
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`my-2 ${msg.type === "user" ? "text-right" : "text-left"}`}
-          >
-            <span
-              className={`inline-block rounded-lg p-2 ${msg.type === "user" ? "bg-blue-500 text-white" : "bg-gray-300"}`}
-            >
-              {msg.text}
-            </span>
-          </div>
-        ))}
-      </div>
-      <div className="flex items-center">
-        <input
-          type="text"
-          value={userInput}
-          onChange={(e) => setUserInput(e.target.value)}
-          className="flex-1 rounded-lg border p-2"
-          placeholder="Type your message..."
-        />
-        <button
-          onClick={handleSend}
-          className="ml-2 rounded-lg bg-blue-500 p-2 text-white"
-        >
-          Send
-        </button>
-        <label className="ml-2 flex items-center">
+    <div className="fixed inset-0 flex flex-col bg-gray-100">
+      <div className="flex items-center justify-between bg-white p-4 shadow">
+        <h1 className="text-xl font-bold text-gray-800">AI Chat</h1>
+        <label className="flex items-center space-x-2">
           <input
             type="checkbox"
             checked={keikiMode}
             onChange={() => setKeikiMode((prev) => !prev)}
-            className="mr-1"
+            className="h-4 w-4 rounded border-gray-300"
           />
-          Keiki Mode
+          <span className="text-sm font-medium text-gray-700">Keiki Mode</span>
         </label>
+      </div>
+
+      <div className="flex-1 overflow-y-auto p-4">
+        <div className="mx-auto max-w-3xl space-y-4">
+          {messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`flex ${msg.type === "user" ? "justify-end" : "justify-start"}`}
+            >
+              <div
+                className={`max-w-[80%] rounded-2xl px-4 py-2 ${
+                  msg.type === "user"
+                    ? "bg-blue-500 text-white"
+                    : "bg-white text-gray-800 shadow"
+                }`}
+              >
+                {msg.loading ? (
+                  <div className="flex items-center space-x-1">
+                    <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400"></div>
+                    <div
+                      className="h-2 w-2 animate-bounce rounded-full bg-gray-400"
+                      style={{ animationDelay: "0.2s" }}
+                    ></div>
+                    <div
+                      className="h-2 w-2 animate-bounce rounded-full bg-gray-400"
+                      style={{ animationDelay: "0.4s" }}
+                    ></div>
+                  </div>
+                ) : (
+                  <p className="whitespace-pre-wrap">{msg.text}</p>
+                )}
+              </div>
+            </div>
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
+      </div>
+
+      <div className="border-t bg-white p-4">
+        <div className="mx-auto max-w-3xl">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSend();
+            }}
+            className="flex space-x-4"
+          >
+            <input
+              type="text"
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+              className="flex-1 rounded-full border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+              placeholder="Type your message..."
+            />
+            <button
+              type="submit"
+              className="rounded-full bg-blue-500 px-6 py-2 font-medium text-white transition-colors hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+            >
+              Send
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
