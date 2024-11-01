@@ -9,6 +9,7 @@ export default function Chat() {
   const [userInput, setUserInput] = useState("");
   const [messages, setMessages] = useState<Message>([]);
   const [keikiMode, setKeikiMode] = useState(false);
+  const [specialMode, setSpecialMode] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -33,6 +34,20 @@ export default function Chat() {
 
   const handleSend = () => {
     if (userInput.trim()) {
+      if (userInput.toLowerCase().trim() === "tell me a joke") {
+        setMessages((prev) => [
+          ...prev,
+          { text: userInput, type: "user" },
+          {
+            text: "What do you call a blind deer in Hawaii?\n\nNo eye deah'.",
+            type: "ai",
+          },
+        ]);
+        setSpecialMode(true);
+        setUserInput("");
+        return;
+      }
+
       setMessages((prev) => [
         ...prev,
         { text: userInput, type: "user" },
@@ -41,13 +56,13 @@ export default function Chat() {
       setUserInput("");
       sendMessage.mutate({
         message: userInput,
-        mode: keikiMode ? "keiki" : "default",
+        mode: specialMode ? "special" : keikiMode ? "keiki" : "default",
       });
     }
   };
 
   return (
-    <div className="fixed inset-0 flex flex-col bg-gray-100">
+    <div className="fixed inset-0 flex flex-col bg-gray-300">
       <div className="flex items-center justify-between bg-white p-4 shadow">
         <h1 className="text-xl font-bold text-gray-800">AI Chat</h1>
         <label className="flex items-center space-x-2">
