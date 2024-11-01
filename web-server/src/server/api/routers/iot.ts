@@ -9,9 +9,15 @@ export const iotRouter = createTRPCRouter({
   registerSwitch: publicProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      await ctx.db.insert(switches).values({
-        id: input.id,
+      const existingSwitch = await ctx.db.query.switches.findFirst({
+        where: eq(switches.id, input.id),
       });
+
+      if (!existingSwitch) {
+        await ctx.db.insert(switches).values({
+          id: input.id,
+        });
+      }
     }),
 
   getSwitch: publicProcedure
@@ -27,6 +33,22 @@ export const iotRouter = createTRPCRouter({
       }
 
       return switchInfo;
+    }),
+
+  getDeviceIdFromSwitchId: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const switchInfo = await ctx.db.query.switches.findFirst({
+        where: eq(switches.id, input.id),
+        with: { device: true },
+      });
+
+      if (!switchInfo) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Switch not found" });
+      }
+
+      const device_id = switchInfo.device_id;
+      return device_id;
     }),
 
   getAllSwitches: publicProcedure.query(({ ctx }) => {
