@@ -62,20 +62,7 @@ export default function Chat() {
   };
 
   return (
-    <div className="fixed inset-0 flex flex-col bg-gray-300">
-      <div className="flex items-center justify-between bg-white p-4 shadow">
-        <h1 className="text-xl font-bold text-gray-800">AI Chat</h1>
-        <label className="flex items-center space-x-2">
-          <input
-            type="checkbox"
-            checked={keikiMode}
-            onChange={() => setKeikiMode((prev) => !prev)}
-            className="h-4 w-4 rounded border-gray-300"
-          />
-          <span className="text-sm font-medium text-gray-700">Keiki Mode</span>
-        </label>
-      </div>
-
+    <div>
       <div className="flex-1 overflow-y-auto p-4">
         <div className="mx-auto max-w-3xl space-y-4">
           {messages.map((msg, index) => (
@@ -111,8 +98,7 @@ export default function Chat() {
           <div ref={messagesEndRef} />
         </div>
       </div>
-
-      <div className="border-t bg-white p-4">
+      <div className="fixed bottom-0 left-0 right-0 border-t bg-white p-4">
         <div className="mx-auto max-w-3xl">
           <form
             onSubmit={(e) => {
@@ -134,6 +120,17 @@ export default function Chat() {
             >
               Send
             </button>
+            <label className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                checked={keikiMode}
+                onChange={() => setKeikiMode((prev) => !prev)}
+                className="h-4 w-4 rounded border-gray-300"
+              />
+              <span className="text-sm font-medium text-gray-700">
+                Keiki Mode
+              </span>
+            </label>
           </form>
         </div>
       </div>

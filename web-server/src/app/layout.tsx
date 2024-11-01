@@ -5,6 +5,7 @@ import { type Metadata } from "next";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { MQTTProvider } from "../mqtt/mqtt-client";
+import Navbar from "./_components/Navbar";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -17,10 +18,13 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
-      <body className="container mx-auto p-4">
-        <TRPCReactProvider>
-          <MQTTProvider>{children}</MQTTProvider>
-        </TRPCReactProvider>
+      <body>
+        <Navbar />
+        <div className="container mx-auto p-4 py-20">
+          <TRPCReactProvider>
+            <MQTTProvider>{children}</MQTTProvider>
+          </TRPCReactProvider>
+        </div>
       </body>
     </html>
   );

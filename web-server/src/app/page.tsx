@@ -35,12 +35,12 @@ export default function App() {
   useEffect(() => {
     if (isLoaded) {
       sendMessage("SceneModifier", "Modify", value);
-      sendMessage("SceneModifier", "SetTotalWatts", totalWatts);
+      // sendMessage("SceneModifier", "SetTotalWatts", totalWatts);
     }
   }, [value, isLoaded, sendMessage]);
 
   return (
-    <Fragment>
+    <>
       <Unity
         className="absolute left-0 top-0 -z-50 h-screen w-screen"
         unityProvider={unityProvider}
@@ -49,6 +49,6 @@ export default function App() {
       <div>
         {usedWatts} / {totalWatts}
       </div>
-    </Fragment>
+    </>
   );
 }
