@@ -4,7 +4,7 @@ import { useSubscribe } from "~/mqtt/mqtt-client";
 import { api } from "~/trpc/react";
 
 /*
-This component pretends to be an arduino switch.
+This component pretends to be an arduino device.
 */
 export default function DeviceTest({ device_id }: { device_id: string }) {
   const device = api.iot.getDevice.useQuery({ id: device_id });
@@ -22,9 +22,7 @@ export default function DeviceTest({ device_id }: { device_id: string }) {
         className={`flex h-10 w-10 items-center justify-center rounded font-bold text-white ${
           isOn ? "bg-green-500" : "bg-red-500"
         }`}
-      >
-        {/* {isOn ? "Off" : "On"} */}
-      </div>
+      ></div>
       <div className="pl-3">
         <h2 className="text-lg font-semibold">
           {device.data?.device_name || "Unnamed Device"}
@@ -33,19 +31,6 @@ export default function DeviceTest({ device_id }: { device_id: string }) {
           {device.data?.watts} Watts | ID: {device.data?.id}
         </p>
       </div>
-      {/* <p className="text-sm text-gray-500">{message}</p> */}
     </div>
   );
 }
-
-// export default function DeviceTest({ device_id }: { device_id: string }) {
-//   const device = api.iot.getDevice.useQuery({ id: device_id });
-//   const topic = device.data ? `device/${device.data?.id}` : "";
-//   const message = useSubscribe([topic]);
-//   // const parsedMessage = JSON.parse(message[topic] ?? '{"state":"off"}');
-//   // const isOn = parsedMessage.state === "on";
-
-//   if (device.isLoading) return <div>Loading</div>;
-
-//   return <div>{JSON.stringify(message)}</div>;
-// }

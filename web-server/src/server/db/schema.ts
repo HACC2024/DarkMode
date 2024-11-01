@@ -37,32 +37,3 @@ export const switchRelations = relations(switches, ({ one }) => ({
     references: [devices.id],
   }),
 }));
-
-// export const deviceSwitchLinks = createTable(
-//   "deviceSwitchLinks",
-//   {
-//     deviceId: varchar("deviceId")
-//       .notNull()
-//       .references(() => devices.id),
-//     switchId: varchar("switchId")
-//       .notNull()
-//       .references(() => switches.id),
-//   },
-//   (table) => ({
-//     pk: primaryKey({ columns: [table.deviceId, table.switchId] }),
-//   }),
-// );
-
-// export const deviceSwitchLinksRelations = relations(
-//   deviceSwitchLinks,
-//   ({ one }) => ({
-//     deviceInfo: one(devices, {
-//       fields: [deviceSwitchLinks.deviceId],
-//       references: [devices.id],
-//     }),
-//     switchInfo: one(switches, {
-//       fields: [deviceSwitchLinks.switchId],
-//       references: [switches.id],
-//     }),
-//   }),
-// );

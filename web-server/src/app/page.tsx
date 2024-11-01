@@ -25,7 +25,7 @@ export default function App() {
 
   const value = usedWatts / totalWatts;
 
-  const { unityProvider, sendMessage } = useUnityContext({
+  const { unityProvider, sendMessage, isLoaded } = useUnityContext({
     loaderUrl: "/unity-display/build/unity-display.loader.js",
     dataUrl: "/unity-display/build/unity-display.data",
     frameworkUrl: "/unity-display/build/unity-display.framework.js",
@@ -33,16 +33,11 @@ export default function App() {
   });
 
   useEffect(() => {
-    sendMessage("SceneModifier", "Modify", value);
-  }, [value]);
-
-  // const [sliderValue, setSliderValue] = useState(0);
-
-  // function handleSliderChange(event: React.ChangeEvent<HTMLInputElement>) {
-  //   const value = parseFloat(event.target.value);
-  //   setSliderValue(value);
-  //   sendMessage("SceneModifier", "Modify", value);
-  // }
+    if (isLoaded) {
+      sendMessage("SceneModifier", "Modify", value);
+      sendMessage("SceneModifier", "SetTotalWatts", totalWatts);
+    }
+  }, [value, isLoaded, sendMessage]);
 
   return (
     <Fragment>
@@ -50,14 +45,6 @@ export default function App() {
         className="absolute left-0 top-0 -z-50 h-screen w-screen"
         unityProvider={unityProvider}
       />
-      {/* <input
-        type="range"
-        min="0"
-        max="1"
-        step="0.01"
-        value={sliderValue}
-        onChange={handleSliderChange}
-      /> */}
       <div>{JSON.stringify(linkedDevices)}</div>
       <div>
         {usedWatts} / {totalWatts}
