@@ -39,7 +39,7 @@ public class GameHandler : MonoBehaviour
         targetValue = t; // Set targetValue to t
     }
 
-    public void Init(int totalWatts)
+    public void SetTotalWatts(int totalWatts)
     {
         this.totalWatts = totalWatts;
     }
