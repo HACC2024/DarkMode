@@ -25,13 +25,11 @@ export default function SwitchForm() {
       <label
         htmlFor="switch-id"
         className="text-l block whitespace-nowrap pr-2 font-bold text-gray-700"
-      >
-        Switch ID
-      </label>
+      ></label>
       <input
         id="switch-id"
         type="text"
-        placeholder="Enter ID"
+        placeholder="Enter Switch ID"
         value={id}
         onChange={(e) => setId(e.target.value)}
         required

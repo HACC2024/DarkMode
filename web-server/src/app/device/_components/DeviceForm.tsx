@@ -25,13 +25,11 @@ export default function DeviceForm() {
       <label
         htmlFor="device-id"
         className="text-l block whitespace-nowrap pr-2 font-bold text-gray-700"
-      >
-        Device ID
-      </label>
+      ></label>
       <input
         id="device-id"
         type="text"
-        placeholder="Enter ID"
+        placeholder="Enter Device ID"
         value={id}
         onChange={(e) => setId(e.target.value)}
         required
