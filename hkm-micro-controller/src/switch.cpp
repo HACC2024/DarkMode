@@ -3,41 +3,73 @@
 #include "SECRETS.h"
 #include <PubSubClient.h>
 #include <HTTPClient.h>
+#include <Bounce2.h>
 
 WiFiClient wifiClient;
 PubSubClient mqttClient(wifiClient);
 String clientId;
-uint8_t ledPin = 23;
+uint8_t switchPin = 23;
+Bounce toggle = Bounce();
 
-int registerDevice(String token, String deviceId)
+int registerSwitch(String token, String switchId)
 {
   String postData = "";
   HTTPClient http;
-  http.begin(SERVER_URL, SERVER_PORT, "/api/device");
-  // http.begin("http://192.168.50.135:3000/api/device");
+  http.begin(SERVER_URL, SERVER_PORT, "/api/switch");
   http.addHeader("Authorization", "Bearer " + token);
-  http.addHeader("X-Client-ID", deviceId);
+  http.addHeader("X-Client-ID", switchId);
   http.addHeader("Content-Length", String(postData.length()));
   int responseCode = http.POST("");
 
-  if (responseCode == 401)
+  switch (responseCode)
   {
+  case 401:
     Serial.println("Authorization Failed");
-  }
-  else if (responseCode == 400)
-  {
+    break;
+  case 400:
     Serial.println("X-Client-ID not found");
-  }
-  else if (responseCode == 200)
-  {
+    break;
+  case 200:
     Serial.println("Registration Successful");
-  }
-  else
-  {
+    break;
+  default:
     Serial.println("Unknown error: " + responseCode);
+    break;
   }
 
   return responseCode;
+}
+
+String getDeviceId(String token, String switchId)
+{
+  String postData = "";
+  HTTPClient http;
+  http.begin(SERVER_URL, SERVER_PORT, "/api/switch");
+  http.addHeader("Authorization", "Bearer " + token);
+  http.addHeader("X-Client-ID", switchId);
+  http.addHeader("Content-Length", String(postData.length()));
+  int responseCode = http.GET();
+
+  switch (responseCode)
+  {
+  case 401:
+    Serial.println("Authorization Failed");
+    break;
+  case 400:
+    Serial.println("X-Client-ID not found");
+    break;
+  case 200:
+    Serial.println("Get Device ID Successful");
+    return http.getString();
+  case 404:
+    Serial.println("Could not find Device ID");
+    break;
+  default:
+    Serial.println("Unknown error: " + responseCode);
+    break;
+  }
+
+  return "";
 }
 
 String getClientId()
@@ -65,33 +97,6 @@ void connectToWifi()
   Serial.println("Connected to WiFi");
 }
 
-void mqttCallback(char *topic, byte *message, unsigned int length)
-{
-  if (String(topic) != "device/" + String(clientId))
-  {
-    return;
-  }
-
-  Serial.print("Message arrived on topic: ");
-  Serial.print(topic);
-  Serial.print(". Message: ");
-
-  String messageTemp = String((char *)message, length);
-  Serial.println(messageTemp);
-
-  Serial.print("Changing output to ");
-  if (messageTemp == "on")
-  {
-    Serial.println("on");
-    digitalWrite(ledPin, HIGH);
-  }
-  else if (messageTemp == "off")
-  {
-    Serial.println("off");
-    digitalWrite(ledPin, LOW);
-  }
-}
-
 void reconnect()
 {
   // Loop until we're reconnected
@@ -103,14 +108,13 @@ void reconnect()
     {
       Serial.println("connected");
       // Subscribe
-      mqttClient.subscribe((String("device/") + clientId).c_str());
     }
     else
     {
       Serial.print("failed, rc=");
       Serial.print(mqttClient.state());
       Serial.println(" try again in 2 seconds");
-      // Wait 5 seconds before retrying
+      // Wait 2 seconds before retrying
       delay(2000);
     }
   }
@@ -119,17 +123,30 @@ void reconnect()
 void connectToMqtt()
 {
   mqttClient.setServer(MQTT_DOMAIN, MQTT_PORT);
-  mqttClient.setCallback(mqttCallback);
+}
+
+void toggleSwitch(int state)
+{
+  String deviceId = getDeviceId(TOKEN, clientId);
+
+  if (deviceId == "")
+  {
+    return;
+  }
+  Serial.println(state == 1 ? "on" : "off");
+  mqttClient.publish(("device/" + deviceId).c_str(), state == 1 ? "on" : "off");
 }
 
 void setup()
 {
-  pinMode(ledPin, OUTPUT);
   Serial.begin(9600);
+  pinMode(switchPin, INPUT_PULLDOWN);
+  toggle.attach(switchPin, INPUT_PULLUP); // USE INTERNAL PULL-UP
+  toggle.interval(5);
   connectToWifi();
   connectToMqtt();
   clientId = getClientId();
-  registerDevice(TOKEN, clientId);
+  registerSwitch(TOKEN, clientId);
 }
 
 void loop()
@@ -139,4 +156,11 @@ void loop()
     reconnect();
   }
   mqttClient.loop();
+
+  toggle.update();
+
+  if (toggle.changed())
+  {
+    toggleSwitch(toggle.read());
+  }
 }
