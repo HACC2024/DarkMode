@@ -55,15 +55,6 @@ export const iotRouter = createTRPCRouter({
       .where(isNull(switches.device_id));
   }),
 
-  // linkSwitchToDevice: publicProcedure
-  //   .input(z.object({ id: z.string(), device_id: z.string() }))
-  //   .mutation(({ ctx, input }) => {
-  //     ctx.db
-  //       .update(switches)
-  //       .set({ device_id: input.device_id })
-  //       .where(eq(switches.id, input.id));
-  //   }),
-
   upsertDevice: publicProcedure
     .input(
       z.object({
