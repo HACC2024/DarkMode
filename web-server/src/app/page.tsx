@@ -26,10 +26,10 @@ export default function App() {
   const value = usedWatts / totalWatts;
 
   const { unityProvider, sendMessage, isLoaded } = useUnityContext({
-    loaderUrl: "/unity-display/build/unity-display.loader.js",
-    dataUrl: "/unity-display/build/unity-display.data",
-    frameworkUrl: "/unity-display/build/unity-display.framework.js",
-    codeUrl: "/unity-display/build/unity-display.wasm",
+    loaderUrl: "/unity-display/Build/unity-display.loader.js",
+    dataUrl: "/unity-display/Build/unity-display.data",
+    frameworkUrl: "/unity-display/Build/unity-display.framework.js",
+    codeUrl: "/unity-display/Build/unity-display.wasm",
   });
 
   useEffect(() => {
@@ -45,10 +45,6 @@ export default function App() {
         className="absolute left-0 top-0 -z-50 h-screen w-screen"
         unityProvider={unityProvider}
       />
-      {/* <div>{JSON.stringify(linkedDevices)}</div>
-      <div>
-        {usedWatts} / {totalWatts}
-      </div> */}
     </>
   );
 }
