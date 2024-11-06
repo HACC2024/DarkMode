@@ -10,6 +10,7 @@ const config = {
     ignoreDuringBuilds: true,
   },
   reactStrictMode: false,
+  output: "standalone",
 };
 
 export default config;

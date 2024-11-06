@@ -14,7 +14,7 @@ int registerDevice(String token, String deviceId)
   String postData = "";
   HTTPClient http;
   http.begin(SERVER_URL, SERVER_PORT, "/api/device");
-  // http.begin("http://192.168.50.135:3000/api/device");
+
   http.addHeader("Authorization", "Bearer " + token);
   http.addHeader("X-Client-ID", deviceId);
   http.addHeader("Content-Length", String(postData.length()));
@@ -110,7 +110,7 @@ void reconnect()
       Serial.print("failed, rc=");
       Serial.print(mqttClient.state());
       Serial.println(" try again in 2 seconds");
-      // Wait 5 seconds before retrying
+      // Wait 2 seconds before retrying
       delay(2000);
     }
   }
