@@ -33,7 +33,6 @@ export const MQTTProvider = (props: { children: React.ReactNode }) => {
 
       client = mqtt.connect(env.NEXT_PUBLIC_MQTT_URL, {
         clientId: randomClientId,
-        rejectUnauthorized: false,
       });
     }
 
