@@ -1,11 +1,5 @@
 "use client";
 import { env } from "~/env";
-
-const options = {
-  username: env.NEXT_PUBLIC_MQTT_CLIENT_USERNAME,
-  password: env.NEXT_PUBLIC_MQTT_CLIENT_PASSWORD,
-};
-
 import React, { createContext, useState, useEffect } from "react";
 import mqtt, { MqttClient } from "mqtt"; // or any other MQTT client library you prefer
 
@@ -36,10 +30,10 @@ export const MQTTProvider = (props: { children: React.ReactNode }) => {
     if (!client?.connected) {
       const randomClientId = `client_${Math.random().toString(36)}`;
       console.log("connecting to mqtt server with id: " + randomClientId);
+
       client = mqtt.connect(env.NEXT_PUBLIC_MQTT_URL, {
         clientId: randomClientId,
-        protocolId: "MQTT",
-        protocolVersion: 4,
+        rejectUnauthorized: false,
       });
     }
 
