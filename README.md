@@ -1,38 +1,23 @@
 # Tech Stack
 
-## Web
-
-### Frontend
-- **TypeScript**
-- **Next.js** - React Framework
-- **Tailwind CSS** - Styling
-- **React**
-
-### Backend
-- **tRPC** - Typesafe API calls
-- **Drizzle** - Database ORM
-- **PostgreSQL** - Database
-
-## CAD
-
-### PlatformIO
-- **ESP32** Microcontroller
-
-### OnShape
-- **CAD** Design
-
-## Server
-
-### Cloudflare
-- **DNS**
-- **Proxy Web Traffic**
-
-### Docker
-- **Deployment**
-
-### Caddy
-- **Reverse Proxy**
-
+| **Category** | **Technology** | **Details**           |
+| ------------ | -------------- | --------------------- |
+| **Unity**    | C#             | Language              |
+|              | ShaderLab      | Language              |
+| **Web**      | TypeScript     | Language              |
+| **Frontend** | NextJS         | React Framework       |
+|              | Tailwind CSS   | Styling               |
+|              | React          | Web Framework         |
+| **Backend**  | tRPC           | Typesafe API calls    |
+|              | Drizzle        | Database ORM          |
+|              | PostgreSQL     | Database              |
+| **ChatBot**  | LangChain      | LLM Framework         |
+|              | OpenAI         | AI API                |
+| **CAD**      | PlatformIO     | ESP32 Microcontroller |
+|              | OnShape        | CAD Software          |
+| **Server**   | Cloudflare     | DNS/ Proxy            |
+|              | Docker         | Deployment            |
+|              | Caddy          | Reverse Proxy         |
 
 ```bash
 docker build -t hacc2024darkmode:latest -f Dockerfile .
