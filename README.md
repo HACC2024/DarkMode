@@ -23,6 +23,8 @@
 |              | OpenAI         | ChatGPT API           |
 | **CAD**      | PlatformIO     | ESP32 Microcontroller |
 |              | OnShape        | CAD Software          |
+|              | Ender 3 V3 SE  | 3D Printer            |
+|              | Orca           | 3D Printer Slicer     |
 | **Server**   | Cloudflare     | DNS / Proxy           |
 |              | Docker         | Deployment            |
 |              | Caddy          | Reverse Proxy         |
