@@ -1,19 +1,20 @@
 #include <Arduino.h>
 #include <WiFi.h>
+#include <WiFiClientSecure.h>
 #include "SECRETS.h"
 #include <PubSubClient.h>
 #include <HTTPClient.h>
 
-WiFiClient wifiClient;
+WiFiClientSecure wifiClient;
 PubSubClient mqttClient(wifiClient);
 String clientId;
-uint8_t ledPin = 23;
+uint8_t ledPin = 13;
 
 int registerDevice(String token, String deviceId)
 {
   String postData = "";
   HTTPClient http;
-  http.begin(SERVER_URL, SERVER_PORT, "/api/device");
+  http.begin(wifiClient, SERVER_URL, SERVER_PORT, "/api/device", true);
 
   http.addHeader("Authorization", "Bearer " + token);
   http.addHeader("X-Client-ID", deviceId);
@@ -63,6 +64,7 @@ void connectToWifi()
   }
   Serial.println();
   Serial.println("Connected to WiFi");
+  wifiClient.setInsecure();
 }
 
 void mqttCallback(char *topic, byte *message, unsigned int length)
@@ -102,8 +104,7 @@ void reconnect()
     if (mqttClient.connect(clientId.c_str()))
     {
       Serial.println("connected");
-      // Subscribe
-      mqttClient.subscribe((String("device/") + clientId).c_str());
+      mqttClient.subscribe(("device/" + clientId).c_str());
     }
     else
     {
@@ -138,5 +139,6 @@ void loop()
   {
     reconnect();
   }
+
   mqttClient.loop();
 }

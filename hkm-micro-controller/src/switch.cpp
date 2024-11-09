@@ -165,6 +165,5 @@ void loop()
   if (toggle.changed())
   {
     toggleSwitch(toggle.read());
-    // Serial.println("SWITCHED");
   }
 }
