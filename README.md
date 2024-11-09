@@ -30,6 +30,9 @@
 |              | Caddy          | Reverse Proxy         |
 |              | Let's Encrypt  | Certificate Authority |
 
+## Diagram
+![diagram](https://github.com/user-attachments/assets/d088818c-fc23-4fc4-ae03-80d1e12965b8)
+
 # Deployment
 
 ## web-server/.env
