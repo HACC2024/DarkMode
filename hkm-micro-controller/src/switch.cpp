@@ -1,24 +1,27 @@
 #include <Arduino.h>
 #include <WiFi.h>
+#include <WiFiClientSecure.h>
 #include "SECRETS.h"
 #include <PubSubClient.h>
 #include <HTTPClient.h>
 #include <Bounce2.h>
 
-WiFiClient wifiClient;
+WiFiClientSecure wifiClient;
 PubSubClient mqttClient(wifiClient);
 String clientId;
-uint8_t switchPin = 23;
+String deviceId;
+uint8_t switchPin = 13;
 Bounce toggle = Bounce();
 
 int registerSwitch(String token, String switchId)
 {
   String postData = "";
   HTTPClient http;
-  http.begin(SERVER_URL, SERVER_PORT, "/api/switch");
+  http.begin(wifiClient, SERVER_URL, SERVER_PORT, "/api/switch", true);
   http.addHeader("Authorization", "Bearer " + token);
   http.addHeader("X-Client-ID", switchId);
   http.addHeader("Content-Length", String(postData.length()));
+
   int responseCode = http.POST("");
 
   switch (responseCode)
@@ -44,7 +47,7 @@ String getDeviceId(String token, String switchId)
 {
   String postData = "";
   HTTPClient http;
-  http.begin(SERVER_URL, SERVER_PORT, "/api/switch");
+  http.begin(wifiClient, SERVER_URL, SERVER_PORT, "/api/switch", true);
   http.addHeader("Authorization", "Bearer " + token);
   http.addHeader("X-Client-ID", switchId);
   http.addHeader("Content-Length", String(postData.length()));
@@ -95,6 +98,7 @@ void connectToWifi()
   }
   Serial.println();
   Serial.println("Connected to WiFi");
+  wifiClient.setInsecure();
 }
 
 void reconnect()
@@ -127,8 +131,6 @@ void connectToMqtt()
 
 void toggleSwitch(int state)
 {
-  String deviceId = getDeviceId(TOKEN, clientId);
-
   if (deviceId == "")
   {
     return;
@@ -146,6 +148,7 @@ void setup()
   connectToWifi();
   connectToMqtt();
   clientId = getClientId();
+  deviceId = getDeviceId(TOKEN, clientId);
   registerSwitch(TOKEN, clientId);
 }
 
@@ -162,5 +165,6 @@ void loop()
   if (toggle.changed())
   {
     toggleSwitch(toggle.read());
+    // Serial.println("SWITCHED");
   }
 }
