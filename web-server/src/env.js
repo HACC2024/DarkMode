@@ -12,9 +12,6 @@ export const env = createEnv({
       .enum(["development", "test", "production"])
       .default("development"),
     DEVICE_TOKEN: z.string(),
-    MQTT_USERNAME: z.string(),
-    MQTT_PASSWORD: z.string(),
-    MQTT_CLIENT: z.string(),
     OPENAI_API_KEY: z.string(),
   },
 
@@ -24,10 +21,7 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    // NEXT_PUBLIC_CLIENTVAR: z.string(),
     NEXT_PUBLIC_MQTT_URL: z.string(),
-    NEXT_PUBLIC_MQTT_CLIENT_USERNAME: z.string(),
-    NEXT_PUBLIC_MQTT_CLIENT_PASSWORD: z.string(),
   },
 
   /**
@@ -38,16 +32,8 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     DEVICE_TOKEN: process.env.DEVICE_TOKEN,
-    MQTT_USERNAME: process.env.MQTT_USERNAME,
-    MQTT_PASSWORD: process.env.MQTT_PASSWORD,
-    MQTT_CLIENT: process.env.MQTT_CLIENT,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
-    // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
     NEXT_PUBLIC_MQTT_URL: process.env.NEXT_PUBLIC_MQTT_URL,
-    NEXT_PUBLIC_MQTT_CLIENT_USERNAME:
-      process.env.NEXT_PUBLIC_MQTT_CLIENT_USERNAME,
-    NEXT_PUBLIC_MQTT_CLIENT_PASSWORD:
-      process.env.NEXT_PUBLIC_MQTT_CLIENT_PASSWORD,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
