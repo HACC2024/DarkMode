@@ -72,8 +72,16 @@ docker run -d -p 3000:3000 --restart unless-stopped --name hacc2024darkmode hacc
 
 # CAD
 
-<img width="2032" alt="device-onshape" src="https://github.com/user-attachments/assets/f57718d3-9e98-4e7c-9ef8-d3829a7dcf3e">
-<img width="2032" alt="switch-onshape" src="https://github.com/user-attachments/assets/f28e041b-4b0c-4aa5-905f-cfdeb26c38ac">
+## Design Model in OnShape
+![1](https://github.com/user-attachments/assets/ecacbf4d-0778-4d8e-845b-c0321a758936)
+## Slice Model in Orca Slicer
+![2](https://github.com/user-attachments/assets/4433e5dc-7846-49ea-80b0-831809151a87)
+## Print Parts
+![3](https://github.com/user-attachments/assets/becf3ecb-d791-4dab-8ee0-55943c465470)
+## Build Micro-controller
+![4](https://github.com/user-attachments/assets/f2ac8d99-d2e1-4d9a-a5eb-cf982e2f1ba4)
+## Sand / Putty / Sand / Prime / Paint
+![5](https://github.com/user-attachments/assets/c625def0-10de-42f0-95b2-77eaf7e3c318)
 
 # Unity
 
