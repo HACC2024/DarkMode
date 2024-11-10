@@ -25,12 +25,13 @@ export default function App() {
 
   const value = usedWatts / totalWatts;
 
-  const { unityProvider, sendMessage, isLoaded } = useUnityContext({
-    loaderUrl: "/unity-display/Build/unity-display.loader.js",
-    dataUrl: "/unity-display/Build/unity-display.data",
-    frameworkUrl: "/unity-display/Build/unity-display.framework.js",
-    codeUrl: "/unity-display/Build/unity-display.wasm",
-  });
+  const { unityProvider, sendMessage, loadingProgression, isLoaded } =
+    useUnityContext({
+      loaderUrl: "/unity-display/Build/unity-display.loader.js",
+      dataUrl: "/unity-display/Build/unity-display.data",
+      frameworkUrl: "/unity-display/Build/unity-display.framework.js",
+      codeUrl: "/unity-display/Build/unity-display.wasm",
+    });
 
   useEffect(() => {
     if (isLoaded) {
@@ -41,6 +42,17 @@ export default function App() {
 
   return (
     <>
+      {loadingProgression < 1 && (
+        <>
+          <div>Loading Museum Dashboard</div>
+          <div className="relative h-2 w-full rounded bg-gray-200">
+            <div
+              className="absolute h-full rounded bg-blue-500 transition-all duration-300"
+              style={{ width: `${loadingProgression * 100}%` }}
+            />
+          </div>
+        </>
+      )}
       <Unity
         className="absolute left-0 top-0 -z-50 h-screen w-screen"
         unityProvider={unityProvider}

@@ -6,6 +6,13 @@ import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { env } from "~/env";
 
+let systemMessage = `
+  You are a helpful assistant.
+  You keep your answer to a maximum of 3 sentences.
+  You are an educator in sustainability in Hawaii and teach concepts well.
+  Answer the question in the context of Hawaii.
+`;
+
 export const chatRouter = createTRPCRouter({
   getAiMessage: publicProcedure
     .input(
@@ -20,17 +27,10 @@ export const chatRouter = createTRPCRouter({
         apiKey: env.OPENAI_API_KEY,
       });
       console.log(input.mode);
-      let systemMessage = `
-        You are a helpful assistant.
-        You keep your answer to a maximum of 3 sentences.
-        You are an educator in science and teach concepts well.
-        You answer question related energy, electric and how it affects the people of Hawaii.
-        If you are asked about other topics, politely remind the user that you only answer questions about energy.
-      `;
 
       if (input.mode === "keiki") {
         systemMessage +=
-          "\nYou can easily explain difficult concepts to a second grader.";
+          "\nYou are speaking to a second grader and can easily explain difficult concepts to them.";
       } else if (input.mode === "special") {
         systemMessage += "\nYou ONLY speak in Hawaiian pidgin creole.";
       }
