@@ -1,10 +1,15 @@
+# Demo
+![output](https://github.com/user-attachments/assets/16e1322e-5d39-438f-a7a3-7013c9db5223)
+
 # Table of Contents
 
 - [Tech Stack](#tech-stack)
+- [Diagram](#diagram)
 - [Deployment](#deployment)
 - [Web](#web)
 - [CAD](#cad)
 - [Unity](#unity)
+- [Chat Bot](#chat-bot)
 
 # Tech Stack
 
@@ -85,8 +90,24 @@ docker run -d -p 3000:3000 --restart unless-stopped --name hacc2024darkmode hacc
 ![4](https://github.com/user-attachments/assets/f2ac8d99-d2e1-4d9a-a5eb-cf982e2f1ba4)
 ## Sand / Putty / Sand / Prime / Paint
 ![5](https://github.com/user-attachments/assets/c625def0-10de-42f0-95b2-77eaf7e3c318)
+## Final
+![hacc-presentation](https://github.com/user-attachments/assets/192f3452-58df-44b1-83a3-eddbd396f74c)
+
 
 # Unity
-
+Goal is to save the island by reducing energy usage
+<img width="2032" alt="Screenshot 2024-11-09 at 9 54 01 PM" src="https://github.com/user-attachments/assets/2c539989-2bde-47fe-a547-bf94d3bc5031">
 <img width="2032" alt="display-high" src="https://github.com/user-attachments/assets/8ddaecd6-7a06-4bb6-acba-6caca5ac58ea">
 <img width="2032" alt="display-low" src="https://github.com/user-attachments/assets/01fb720b-d830-4048-a736-0441fa82af62">
+
+# Chat Bot
+Ask the Chat Bot questions relating to energy
+<img width="2032" alt="Screenshot 2024-11-09 at 9 42 30 PM" src="https://github.com/user-attachments/assets/af8e08cf-0dbd-4faa-af7c-ac72462d60a7">
+Keiki mode for children
+<img width="2032" alt="Screenshot 2024-11-09 at 9 42 40 PM" src="https://github.com/user-attachments/assets/186cfd82-0ccb-4db8-88f2-6f4dd53677a5">
+Hidden feature - Tell the Chat Bot to tell you a joke and see what happens!
+<img width="2032" alt="Screenshot 2024-11-09 at 9 42 51 PM" src="https://github.com/user-attachments/assets/02ca77b0-5332-4c06-a11f-8314db23d3a2">
+After asking to tell you a joke, the Chat Bot will now speak in Hawaiian Pidgin
+<img width="2032" alt="Screenshot 2024-11-09 at 9 43 08 PM" src="https://github.com/user-attachments/assets/29d52f07-8e48-413c-a91b-40729270fda5">
+
+
