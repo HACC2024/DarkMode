@@ -29,7 +29,7 @@ export default function TestPage() {
           </h1>
           <DeviceForm />
           {allDevices.data?.map((device) => (
-            <DeviceTest key={device.id} device_id={device.id} />
+            <DeviceTest key={device.id} debug={true} device_id={device.id} />
           ))}
         </div>
       </div>

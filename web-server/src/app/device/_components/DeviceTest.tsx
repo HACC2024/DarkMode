@@ -6,7 +6,13 @@ import { api } from "~/trpc/react";
 /*
 This component pretends to be an arduino device.
 */
-export default function DeviceTest({ device_id }: { device_id: string }) {
+export default function DeviceTest({
+  device_id,
+  debug = false,
+}: {
+  device_id: string;
+  debug?: boolean;
+}) {
   const device = api.iot.getDevice.useQuery({ id: device_id });
   const topic = device.data ? `device/${device.data?.id}` : "";
   const message = useSubscribe([topic]);
@@ -28,7 +34,7 @@ export default function DeviceTest({ device_id }: { device_id: string }) {
           {device.data?.device_name || "Unnamed Device"}
         </h2>
         <p className="text-gray-600">
-          {device.data?.watts} Watts | ID: {device.data?.id}
+          {device.data?.watts} Watts {debug ? "| ID: " + device.data?.id : ""}
         </p>
       </div>
     </div>
