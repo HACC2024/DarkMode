@@ -79,7 +79,11 @@ docker run -d -p 3000:3000 --restart unless-stopped --name hacc2024darkmode hacc
 
 # Web
 
+Device Registration
 <img width="2032" alt="registration" src="https://github.com/user-attachments/assets/37ca0246-041f-4dcc-94b4-6681a3d5d72e">
+
+Energy Statistics Display
+<img width="2032" alt="Screenshot 2024-11-15 at 12 08 50 PM" src="https://github.com/user-attachments/assets/15afb5ad-0bd8-492f-8d0d-a5d012af3cc8">
 
 # CAD
 
